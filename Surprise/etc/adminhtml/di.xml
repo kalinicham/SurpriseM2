@@ -3,8 +3,8 @@
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-                <item name="custom-tab-with-content" xsi:type="array">
-                    <item name="class" xsi:type="string">TSG\Surprise\Ui\DataProvider\Product\Form\Modifier\CustomTab</item>
+                <item name="surprise-tab" xsi:type="array">
+                    <item name="class" xsi:type="string">TSG\Surprise\Ui\DataProvider\Product\Form\Modifier\SurpriseTab</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                 </item>
             </argument>
