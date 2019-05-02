@@ -1,172 +1,159 @@
 <?php
-namespace TSG\Surprise\Ui\DataProvider\Product\Form\Modifier;
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace TSG\Module\Ui\DataProvider\Product\Modifier;
 
-
-
-
-use Magento\Ui\Component\Container;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Ui\Component\Modal;
-
-use Magento\Framework\UrlInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
+use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\DynamicRows;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Form\Element\DataType\Number;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Field;
-use Magento\Framework\Phrase;
-use Magento\Catalog\Api\ProductLinkRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Ui\Component\Form\Fieldset;
+use Magento\Ui\Component\Modal;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
-
-
-class SurpriseTab extends AbstractModifier
+/**
+ * Class Customertab
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Customertab extends AbstractModifier
 {
-
     const DATA_SCOPE = '';
-    const DATA_SCOPE_SURPRICE = 'surprisetab';
-    const GROUP_SURPRISETAB = 'surprisetab';
+    const DATA_SCOPE_CUSTOMER = 'customertab';
+    const GROUP_CUSTOMERTAB = 'customertab';
 
-    private static $previousGroup = 'content';
-    private static $sortOrder = 5;
+    /**
+     * @var string
+     */
+    private static $previousGroup = 'search-engine-optimization';
 
+    /**
+     * @var int
+     */
+    private static $sortOrder = 90;
+
+    /**
+     * @var LocatorInterface
+     */
     protected $locator;
+
+    /**
+     * @var UrlInterface
+     */
     protected $urlBuilder;
+
+    /**
+     * @var ProductLinkRepositoryInterface
+     */
     protected $productLinkRepository;
-    protected $productRepository;
-    protected $imageHelper;
-    protected $status;
-    protected $attributeSetRepository;
-    protected $scopeName;
-    protected $scopePrefix;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
     protected $CustomerInterface;
+
+    /**
+     * @var ImageHelper
+     */
+    protected $imageHelper;
+
+    /**
+     * @var Status
+     */
+    protected $status;
+
+    /**
+     * @var AttributeSetRepositoryInterface
+     */
+    protected $attributeSetRepository;
+
+    /**
+     * @var string
+     */
+    protected $scopeName;
+
+    /**
+     * @var string
+     */
+    protected $scopePrefix;
+
+    /**
+     * @var \Magento\Catalog\Ui\Component\Listing\Columns\Price
+     */
+    private $priceModifier;
+
     private $collectionFactory;
 
+    /**
+     * @param LocatorInterface $locator
+     * @param UrlInterface $urlBuilder
+     * @param ProductLinkRepositoryInterface $productLinkRepository
+     * @param ProductRepositoryInterface $productRepository
+     * @param ImageHelper $imageHelper
+     * @param Status $status
+     * @param AttributeSetRepositoryInterface $attributeSetRepository
+     * @param string $scopeName
+     * @param string $scopePrefix
+     */
     public function __construct(
         LocatorInterface $locator,
         UrlInterface $urlBuilder,
-        ProductLinkRepositoryInterface $productLinkRepository,
-        ProductRepositoryInterface $productRepository,
+        CustomerInterface $CustomerInterface,
         ImageHelper $imageHelper,
         Status $status,
         AttributeSetRepositoryInterface $attributeSetRepository,
-        CustomerInterface $CustomerInterface,
         CollectionFactory $collectionFactory,
         $scopeName = '',
         $scopePrefix = ''
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        // $this->productLinkRepository = $productLinkRepository;
         $this->CustomerInterface = $CustomerInterface;
-        $this->collectionFactory = $collectionFactory;
-        $this->productLinkRepository = $productLinkRepository;
-        $this->productRepository = $productRepository;
         $this->imageHelper = $imageHelper;
         $this->status = $status;
         $this->attributeSetRepository = $attributeSetRepository;
         $this->scopeName = $scopeName;
         $this->scopePrefix = $scopePrefix;
+        $this->collectionFactory = $collectionFactory;
     }
 
-
-
-    public function modifyData(array $data)
-    {
-
-
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->locator->getProduct();
-        $productId = $product->getId();
-
-        if (!$productId) {
-            return $data;
-        }
-
-       // $priceModifier = $this->getPriceModifier();
-        /**
-         * Set field name for modifier
-         */
-       // $priceModifier->setData('name', 'price');
-
-        foreach ($this->getDataScopes() as $dataScope) {
-//            $data[$productId]['links'][$dataScope] = [];
-//            foreach ($this->productLinkRepository->getList($product) as $linkItem) {
-//                if ($linkItem->getLinkType() !== $dataScope) {
-//                    continue;
-//                }
-//
-//                /** @var \Magento\Catalog\Model\Product $linkedProduct */
-//                $linkedProduct = $this->productRepository->get(
-//                    $linkItem->getLinkedProductSku(),
-//                    false,
-//                    $this->locator->getStore()->getId()
-//                );
-//                $data[$productId]['links'][$dataScope][] = $this->fillData($linkedProduct, $linkItem);
-//            }
-//            if (!empty($data[$productId]['links'][$dataScope])) {
-//                $dataMap = $priceModifier->prepareDataSource([
-//                    'data' => [
-//                        'items' => $data[$productId]['links'][$dataScope]
-//                    ]
-//                ]);
-//                $data[$productId]['links'][$dataScope] = $dataMap['data']['items'];
-//            }
-        }
-
-        $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
-        $data[$productId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $this->locator->getStore()->getId();
-
-        return $data;
-
-    }
-
-    protected function getDataScopes()
-    {
-        return [
-            static::DATA_SCOPE_SURPRICE,
-        ];
-    }
-
-    protected function fillData($linkItem)
-    {
-        return [
-            'id' => $linkItem->getId(),
-            'name' => $linkItem->getName(),
-        ];
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function modifyMeta(array $meta)
     {
-        $this->meta = $meta;
-        $this->meta = array_replace_recursive(
-        $this->meta,
+        $meta = array_replace_recursive(
+            $meta,
             [
-                static::GROUP_SURPRISETAB => [
+                static::GROUP_CUSTOMERTAB => [
                     'children' => [
-                        $this->scopePrefix . static::DATA_SCOPE_SURPRICE => $this->getCustomerFieldset(),
+                        $this->scopePrefix . static::DATA_SCOPE_CUSTOMER => $this->getCustomerFieldset(),
                     ],
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'label' => __('Customer_Surprise'),
+                                'label' => __('Customer'),
                                 'collapsible' => true,
                                 'componentType' => Fieldset::NAME,
                                 'dataScope' => static::DATA_SCOPE,
                                 'sortOrder' =>
                                     $this->getNextGroupSortOrder(
-                                        $this->meta,
+                                        $meta,
                                         self::$previousGroup,
                                         self::$sortOrder
                                     ),
@@ -177,11 +164,91 @@ class SurpriseTab extends AbstractModifier
                 ],
             ]
         );
-        return $this->meta;
+
+        return $meta;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function modifyData(array $data)
+    {
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->locator->getProduct();
+        $productId = $product->getId();
+
+        if (!$productId) {
+            return $data;
+        }
+
+        $customer = $this->CustomerInterface->getId();
+        $collection = $this->collectionFactory->create();
+        foreach ($this->getDataScopes() as $dataScope) {
+
+            $data[$productId]['links'][$dataScope] = [];
+            foreach ($collection as $linkItem) {
+                // if ($linkItem->getLinkType() !== $dataScope) {
+                // continue;
+                // }
+
+                // /** @var \Magento\Catalog\Model\Product $linkedProduct */
+                // $linkedProduct = $this->productRepository->get(
+                // $linkItem->getLinkedProductSku(),
+                // false,
+                // $this->locator->getStore()->getId()
+                // );
+                $data[$productId]['links'][$dataScope][] = $this->fillData($linkItem);
+            }
+            // if (!empty($data[$productId]['links'][$dataScope])) {
+            // $dataMap = $priceModifier->prepareDataSource([
+            // 'data' => [
+            // 'items' => $data[$productId]['links'][$dataScope]
+            // ]
+            // ]);
+            // $data[$productId]['links'][$dataScope] = $dataMap['data']['items'];
+            // }
+        }
+
+        $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
+        $data[$productId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $this->locator->getStore()->getId();
+
+        return $data;
     }
 
 
+    /**
+     * Prepare data column
+     *
+     * @param ProductInterface $linkedProduct
+     * @param ProductLinkInterface $linkItem
+     * @return array
+     */
+    protected function fillData($linkItem)
+    {
+        return [
+            'id' => $linkItem->getId(),
+            'name' => $linkItem->getName(),
+            'email' => $linkItem->getEmail(),
+        ];
+    }
 
+    /**
+     * Retrieve all data scopes
+     *
+     * @return array
+     */
+    protected function getDataScopes()
+    {
+        return [
+            static::DATA_SCOPE_CUSTOMER,
+        ];
+    }
+
+    /**
+     * Prepares config for the Related products fieldset
+     *
+     * @return array
+     */
     protected function getCustomerFieldset()
     {
         $content = __(
@@ -190,7 +257,7 @@ class SurpriseTab extends AbstractModifier
 
         return [
             'children' => [
-              /*  'button_set' => $this->getButtonSet(
+                'button_set' => $this->getButtonSet(
                     $content,
                     __('Add Specific Customer'),
                     $this->scopePrefix . static::DATA_SCOPE_CUSTOMER
@@ -198,14 +265,14 @@ class SurpriseTab extends AbstractModifier
                 'modal' => $this->getGenericModal(
                     __('Add Specific Customer'),
                     $this->scopePrefix . static::DATA_SCOPE_CUSTOMER
-                ),*/
-               static::DATA_SCOPE_SURPRICE => $this->getGrid($this->scopePrefix . static::DATA_SCOPE_SURPRICE),
+                ),
+                static::DATA_SCOPE_CUSTOMER => $this->getGrid($this->scopePrefix . static::DATA_SCOPE_CUSTOMER),
             ],
             'arguments' => [
                 'data' => [
                     'config' => [
                         'additionalClasses' => 'admin__fieldset-section',
-                        'label' => __('Добавити сюрпризи'),
+                        'label' => __('Customer'),
                         'collapsible' => false,
                         'componentType' => Fieldset::NAME,
                         'dataScope' => '',
@@ -218,16 +285,16 @@ class SurpriseTab extends AbstractModifier
 
 
     /**
-    * Retrieve button set
-    *
-    * @param Phrase $content
-    * @param Phrase $buttonTitle
-    * @param string $scope
-    * @return array
-    */
+     * Retrieve button set
+     *
+     * @param Phrase $content
+     * @param Phrase $buttonTitle
+     * @param string $scope
+     * @return array
+     */
     protected function getButtonSet(Phrase $content, Phrase $buttonTitle, $scope)
     {
-        $modalTarget = $this->scopeName . '.' . static::GROUP_SURPRISETAB . '.' . $scope . '.modal';
+        $modalTarget = $this->scopeName . '.' . static::GROUP_CUSTOMERTAB . '.' . $scope . '.modal';
 
         return [
             'arguments' => [
@@ -269,7 +336,6 @@ class SurpriseTab extends AbstractModifier
             ],
         ];
     }
-
 
     /**
      * Prepares config for modal slide-out panel
@@ -351,18 +417,24 @@ class SurpriseTab extends AbstractModifier
         return $modal;
     }
 
+    /**
+     * Retrieve grid
+     *
+     * @param string $scope
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function getGrid($scope)
     {
-        $dataProvider = $scope . '_surprise_listing';
-        $a = 'stop line';
+        $dataProvider = $scope . '_customer_listing';
         return [
             'arguments' => [
                 'data' => [
                     'config' => [
                         'additionalClasses' => 'admin__field-wide',
                         'componentType' => DynamicRows::NAME,
-                        'label' => __('Таблица'),
-                        'columnsHeader' => true,
+                        'label' => null,
+                        'columnsHeader' => false,
                         'columnsHeaderAfterRender' => true,
                         'renderDefaultRecord' => false,
                         'template' => 'ui/dynamic-rows/templates/grid',
@@ -375,6 +447,7 @@ class SurpriseTab extends AbstractModifier
                         'map' => [
                             'id' => 'entity_id',
                             'name' => 'name',
+                            'email' => 'email',
                         ],
                         'links' => [
                             'insertData' => '${ $.provider }:${ $.dataProvider }'
@@ -412,6 +485,7 @@ class SurpriseTab extends AbstractModifier
         return [
             'id' => $this->getTextColumn('id', false, __('ID'), 0),
             'name' => $this->getTextColumn('name', false, __('Name'), 20),
+            'email' => $this->getTextColumn('email', true, __('Email'), 30),
             'actionDelete' => [
                 'arguments' => [
                     'data' => [
@@ -460,7 +534,5 @@ class SurpriseTab extends AbstractModifier
 
         return $column;
     }
-
 }
-
 
