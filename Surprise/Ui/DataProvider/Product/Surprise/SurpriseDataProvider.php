@@ -15,12 +15,12 @@ use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
  */
 class SurpriseDataProvider extends ProductDataProvider
 {
-    /**
-     * {@inheritdoc}
-     * @since 101.0.0
-     */
-    protected function getLinkType()
+
+    public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        return 'surprise';
+        $filter->setConditionType('eq');
+        $filter->setField('is_surprise');
+        $filter->setValue('1');
+        parent::addFilter($filter);
     }
 }

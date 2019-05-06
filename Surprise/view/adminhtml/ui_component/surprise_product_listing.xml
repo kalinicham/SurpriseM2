@@ -134,12 +134,12 @@
                 <label translate="true">Type</label>
             </settings>
         </column>
-        <column name="sku" sortOrder="70">
+  <!--      <column name="sku" sortOrder="70">
             <settings>
                 <filter>text</filter>
                 <label translate="true">SKU</label>
             </settings>
-        </column>
+        </column>-->
         <column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="80">
             <settings>
                 <addField>true</addField>
