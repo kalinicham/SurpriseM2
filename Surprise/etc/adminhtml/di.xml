@@ -18,5 +18,12 @@
         </arguments>
     </type>
 
+    <type name="TSG\Surprise\Model\ProductLink\CollectionProvider\Surprise">
+        <plugin name="change_link_before" type="\TSG\Surprise\Plugin\Related" sortOrder="2" disabled="false" />
+    </type>
+
+    <type name="Magento\Catalogue\Ui\DataProvider\Product\Form\Modifier\Related">
+        <plugin name="custom_change_modifyMeta_after" type="\TSG\Surprise\Plugin\Related" sortOrder="1" disabled="false" />
+    </type>
 
 </config>

@@ -13,7 +13,9 @@ class InstallData implements InstallDataInterface
 {
     private $eavSetupFactory;
 
-    public function __construct(EavSetupFactory $eavSetupFactory)
+    public function __construct(
+        EavSetupFactory $eavSetupFactory
+    )
     {
         $this->eavSetupFactory = $eavSetupFactory;
     }
@@ -47,5 +49,26 @@ class InstallData implements InstallDataInterface
                 'apply_to' => ''
             ]
         );
+
+        $data = [
+                ['link_type_id' => \TSG\Surprise\Model\Product\Link::LINK_TYPE_SURPRISE,
+                'code'=> 'surprise']
+        ];
+
+        foreach ($data as $bind) {
+            $setup->getConnection()
+                ->insertForce('catalog_product_link_type',$bind);
+        }
+
+        $data = [
+            [
+                'link_type_id' => \TSG\Surprise\Model\Product\Link::LINK_TYPE_SURPRISE,
+                'product_link_attribute_code' => 'position',
+                'data_type' => 'int',
+            ]
+        ];
+
+        $setup->getConnection()
+            ->insertMultiple($setup->getTable('catalog_product_link_attribute'), $data);
     }
 }

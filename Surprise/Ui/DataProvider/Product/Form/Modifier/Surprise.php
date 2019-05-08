@@ -37,7 +37,8 @@ class Surprise extends AbstractModifier
 {
     const DATA_SCOPE = '';
     const DATA_SCOPE_SURPISE = 'surprise';
-    const GROUP_SURPRISE = 'surprise';
+//    const GROUP_SURPRISE = 'surprise';
+    const GROUP_SURPRISE = 'related';
 
     /**
      * @var string
