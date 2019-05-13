@@ -19,7 +19,7 @@ class InstallSchema implements InstallSchemaInterface
         $table = $installer->getConnection()->newTable(
             $installer->getTable('tsg_product_surprise')
         )->addColumn(
-            'id',
+            'entity_id',
             \Magento\Framework\Db\Ddl\Table::TYPE_INTEGER,
             null,
             array(
@@ -33,15 +33,23 @@ class InstallSchema implements InstallSchemaInterface
             array(
                 'nullable' => false
             ),
-            'Product Id'
+            'Link id'
         )->addColumn(
-            'related_product_id',
+            'linked_product_id',
             \Magento\Framework\Db\Ddl\Table::TYPE_INTEGER,
             null,
             array(
                 'nullable' => false
             ),
-            'Related Product Id'
+            'linked_product_id'
+        )->addColumn(
+            'count_sold',
+            \Magento\Framework\Db\Ddl\Table::TYPE_INTEGER,
+            null,
+            array(
+                'nullable' => true,
+                'default' => 0,
+            )
         );
 
         /*$table->addForeignKey();*/

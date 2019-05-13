@@ -50,4 +50,5 @@ class Product Extends \Magento\Catalog\Model\Product
         $collection->setProduct($this);
         return $collection;
     }
+
 }

@@ -22,8 +22,13 @@
         <plugin name="change_link_before" type="\TSG\Surprise\Plugin\Related" sortOrder="2" disabled="false" />
     </type>
 
-    <type name="Magento\Catalogue\Ui\DataProvider\Product\Form\Modifier\Related">
-        <plugin name="custom_change_modifyMeta_after" type="\TSG\Surprise\Plugin\Related" sortOrder="1" disabled="false" />
+    <type name="Magento\Catalog\Model\Product\Link\SaveHandler">
+        <plugin name="save_link_surprise_custom_model_after" type="\TSG\Surprise\Plugin\SaveLinkCustomModel" sortOrder="1" disabled="false" />
     </type>
+
+    <!--<type name="Magento\Catalogue\Ui\DataProvider\Product\Form\Modifier\Related">
+        <plugin name="custom_change_modifyMeta_after" type="\TSG\Surprise\Plugin\Related" sortOrder="1" disabled="false" />
+    </type>-->
+
 
 </config>
