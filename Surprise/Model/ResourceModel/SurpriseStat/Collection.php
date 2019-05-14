@@ -12,4 +12,6 @@ class Collection extends AbstractCollection
     {
         $this->_init(SurpriseStat::class, SurpriseStatResource::class);
     }
+
+
 }

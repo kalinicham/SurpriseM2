@@ -1,59 +1,55 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kalinich
- * Date: 5/11/19
- * Time: 10:29 AM
- */
 
 namespace TSG\Surprise\Plugin;
 
-use Magento\Setup\Exception;
+//use Magento\Framework\ObjectManagerInterface;
 use TSG\Surprise\Model\Product\LinkFactory;
+use TSG\Surprise\Model\ResourceModel\SurpriseStatResourceFactory;
 use TSG\Surprise\Model\SurpriseStatFactory;
 
 class SaveLinkCustomModel
 {
 
+
     private $productLink;
     private $surpriseStat;
+    private $statResource;
+
 
     public function __construct(
-        LinkFactory $productLink,
-        SurpriseStatFactory $statFactory
+        SurpriseStatResourceFactory $statResource,
+        SurpriseStatFactory $surpriseStat,
+        LinkFactory $productLink
     )
     {
+        $this->statResource = $statResource;
+        $this->surpriseStat = $surpriseStat;
         $this->productLink = $productLink;
-        $this->surpriseStat = $statFactory;
     }
+
 
     public function afterExecute($entityType, $entity)
     {
 
-       $productLink = $this->productLink->create();
-       $productLink->useSurpriseLinks();
+        $productLink = $this->productLink->create();
+        $productLink->useSurpriseLinks();
 
-      foreach ($productLink->getLinkCollection()->addLinkTypeIdFilter() as $item)
-       {
-           $surpriseStat = $this->surpriseStat->create();
-            $surpriseStat->setEntityId($item->getId());
-//            $surpriseStat->setLinkedProductId($item->getLinkedProductId());
-//            $surpriseStat->setIdFieldName('entity_id');
-            //$surpriseStat->setId('1');
-           $a = 'stopline';
-           try {
+        foreach ($productLink->getLinkCollection()->addLinkTypeIdFilter() as $item){
+            $surpriseStat = $this->surpriseStat->create();
+            $statResource = $this->statResource->create();
 
-              // $surpriseStat->beforeSave();
-             //  $surpriseStat->afterSave();
-               $surpriseStat->save();
-
-           } catch (Exception $exception) {
-               echo $exception->getMessage();
-           }
+            $id = $surpriseStat->getCollection()->addFieldToSelect('entity_id')
+                ->addFieldToFilter( 'product_id', array( 'eq' => $item->getProductId()))
+                ->addFieldToFilter('linked_product_id', array( 'eq' => $item->getLinkedProductId())
+                )->getLastItem()->getData('entity_id');
 
 
-       }
+            if ($id == null) {
+                $surpriseStat->setProductId($item->getProductId());
+                $surpriseStat->setLinkedProductId($item->getLinkedProductId());
+                $statResource->save($surpriseStat);
+            }
 
+        }
     }
-
 }
