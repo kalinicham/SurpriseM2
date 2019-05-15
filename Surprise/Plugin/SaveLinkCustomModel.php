@@ -2,51 +2,48 @@
 
 namespace TSG\Surprise\Plugin;
 
-//use Magento\Framework\ObjectManagerInterface;
 use TSG\Surprise\Model\Product\LinkFactory;
 use TSG\Surprise\Model\ResourceModel\SurpriseStatResourceFactory;
 use TSG\Surprise\Model\SurpriseStatFactory;
+use TSG\Surprise\Model\ResourceModel\SurpriseStat\CollectionFactory;
 
 class SaveLinkCustomModel
 {
 
-
     private $productLink;
     private $surpriseStat;
     private $statResource;
-
+    private $collectionFactory;
 
     public function __construct(
+        CollectionFactory $collectionFactory,
         SurpriseStatResourceFactory $statResource,
         SurpriseStatFactory $surpriseStat,
         LinkFactory $productLink
-    )
+     )
     {
+        $this->collectionFactory = $collectionFactory;
         $this->statResource = $statResource;
         $this->surpriseStat = $surpriseStat;
         $this->productLink = $productLink;
     }
 
-
-    public function afterExecute($entityType, $entity)
+    public function afterExecute()
     {
 
-        $productLink = $this->productLink->create();
-        $productLink->useSurpriseLinks();
+        $productLink = $this->productLink->create()->useSurpriseLinks();
 
         foreach ($productLink->getLinkCollection()->addLinkTypeIdFilter() as $item){
-            $surpriseStat = $this->surpriseStat->create();
-            $statResource = $this->statResource->create();
 
-            $id = $surpriseStat->getCollection()->addFieldToSelect('entity_id')
-                ->addFieldToFilter( 'product_id', array( 'eq' => $item->getProductId()))
-                ->addFieldToFilter('linked_product_id', array( 'eq' => $item->getLinkedProductId())
-                )->getLastItem()->getData('entity_id');
+            $collectionFactory = $this->collectionFactory->create()
+                ->addFilter('product_id', $item->getProductId())
+                ->addFilter('linked_product_id', $item->getLinkedProductId());
 
-
-            if ($id == null) {
-                $surpriseStat->setProductId($item->getProductId());
-                $surpriseStat->setLinkedProductId($item->getLinkedProductId());
+            if ($collectionFactory->count() == 0) {
+                $statResource = $this->statResource->create();
+                    $surpriseStat = $this->surpriseStat->create();
+                    $surpriseStat->setProductId($item->getProductId());
+                    $surpriseStat->setLinkedProductId($item->getLinkedProductId());
                 $statResource->save($surpriseStat);
             }
 

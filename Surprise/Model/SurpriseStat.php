@@ -28,7 +28,6 @@ class SurpriseStat extends AbstractModel implements SurpriseStatInterface, Ident
         // TODO: Implement getProductId() method.
     }
 
-
     public function getLinkedProductId($index = null)
     {
         return $this->getData( 'linked_product_id',$index);
