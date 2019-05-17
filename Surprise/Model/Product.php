@@ -1,5 +1,11 @@
 <?php
+
+
+
+
 namespace TSG\Surprise\Model;
+
+use TSG\Surprise\Model\Product\Link;
 
 class Product Extends \Magento\Catalog\Model\Product
 {
@@ -11,7 +17,7 @@ class Product Extends \Magento\Catalog\Model\Product
      * @return array
      */
 
-    public function getSurpriseProducts()
+    public function getSurpriseProducts(): array
     {
         if (!$this->hasSurpriseProducts()) {
             $products = [];
@@ -46,9 +52,11 @@ class Product Extends \Magento\Catalog\Model\Product
      */
     public function getSurpriseProductCollection()
     {
-        $collection = $this->getLinkInstance()->setLinkTypeId(static::LINK_TYPE_SURPRISE)->getProductCollection()->setIsStrongMode();
+        $collection = $this->getLinkInstance()->setLinkTypeId(Link::LINK_TYPE_SURPRISE)->getProductCollection()->setIsStrongMode();
         $collection->setProduct($this);
         return $collection;
     }
+
+
 
 }

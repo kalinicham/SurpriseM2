@@ -1,7 +1,12 @@
-<?php $_surpriseCollection = $block->getLoadedSurpriseCollection(); ?>
-<div class="control">
-    <select id="surprise" >
-        <option value="null" selected="selected">Choose a surprise</option>
+<?php
 
+    $_surpriseCollection = $block->getSurpriseCollection();
+
+    ?>
+<div class="control">
+    <select id="surprise">
+        <option value="null" selected="selected">Choose a surprise</option>
     </select>
+
+    <?php var_dump($_surpriseCollection); ?>
 </div>

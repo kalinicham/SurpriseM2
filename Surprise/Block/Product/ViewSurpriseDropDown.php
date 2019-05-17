@@ -8,57 +8,109 @@
 
 namespace TSG\Surprise\Block\Product;
 
+use TSG\Surprise\Model\ProductFactory;
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\App\Request\Http;
+use Magento\Catalog\Model\Product\Visibility;
 
-class ViewSurpriseDropDown extends \Magento\Catalog\Block\Product\AbstractProduct implements
-    \Magento\Framework\DataObject\IdentityInterface
+class ViewSurpriseDropDown extends \Magento\Catalog\Block\Product\AbstractProduct
 {
+
+
+    /**
+     * @var \TSG\Surprise\Model\Product
+     */
+    private $productSurprise;
 
     /**
      * @var Collection
      */
     protected $_itemCollection;
 
+    /**
+     * @var Http
+     */
+    protected $request;
 
-    public function getLoadedSurpriseCollection()
+    /**
+     * Catalog product visibility
+     *
+     * @var \Magento\Catalog\Model\Product\Visibility
+     */
+    protected $_catalogProductVisibility;
+
+    /**
+     * @param \Magento\Framework\App\Request\Http
+     * @param \TSG\Surprise\Model\ProductFactory
+     * @param Context $context
+     * @param array $data
+     *
+     */
+
+    public function __construct(
+        Http $request,
+        ProductFactory $productSurprise,
+        Visibility $catalogProductVisibility,
+        Context $context,
+        array $data = [])
     {
-
+        $this->request = $request;
+        $this->productSurprise = $productSurprise;
+        $this->_catalogProductVisibility = $catalogProductVisibility;
+        parent::__construct($context, $data);
     }
 
-    protected function _prepareData()
-    {
-        $product = $this->getProduct();
-        /* @var $product \Magento\Catalog\Model\Product */
+    /**
+     * Get id post value
+     *
+     * @return integer
+     */
 
-        $this->_itemCollection = $product->getRelatedProductCollection()->addAttributeToSelect(
+    public function getIdPost()
+    {
+        return $this->request->getParam('id');
+    }
+
+    /**
+     * @return $this
+     */
+    protected function getSurpriseCollection()
+    {
+        $id = $this->getIdPost();
+
+        /* @var $productSurprise \TSG\Surprise\Model\Product */
+        $productSurprise = $this->productSurprise->create()->load($id);
+
+        $this->_itemCollection = $productSurprise->getSurpriseProductCollection()->addAttributeToSelect(
             'required_options'
         )->setPositionOrder()->addStoreFilter();
 
-      /*  if ($this->moduleManager->isEnabled('Magento_Checkout')) {
-            $this->_addProductAttributesAndPrices($this->_itemCollection);
-        }
         $this->_itemCollection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 
         $this->_itemCollection->load();
 
         foreach ($this->_itemCollection as $product) {
             $product->setDoNotUseCategoryId(true);
-        }*/
+        }
 
-        return $this;
+        $this->_itemCollection->load();
+
+       return $this;
     }
 
 
     /**
-     * Return unique ID(s) for each object in system
+     * Before to html handler
      *
-     * @return string[]
+     * @return $this
      */
-    public function getIdentities()
+  /*  protected function _beforeToHtml()
     {
-        $identities = [];
-        foreach ($this->getItems() as $item) {
-            $identities = array_merge($identities, $item->getIdentities());
-        }
-        return $identities;
-    }
+        $this->_prepareData();
+        return parent::_beforeToHtml();
+    }*/
+
+
+
 }
