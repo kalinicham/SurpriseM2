@@ -47,14 +47,22 @@ class ViewSurpriseDropDown extends Template
      */
     protected $productResource;
 
+    /**
+     * @param Http $request
+     * @param Product $productSurprise
+     * @param Visibility $_catalogProductVisibility
+     * @param ProductFactory $productResource
+     * @param Context $context
+     * @param array $data
+     */
     public function __construct(
         Http $request,
         Product $productSurprise,
         Visibility $_catalogProductVisibility,
         ProductFactory $productResource,
         Context $context,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->request = $request;
         $this->productSurprise = $productSurprise;
         $this->_catalogProductVisibility = $_catalogProductVisibility;
@@ -62,27 +70,16 @@ class ViewSurpriseDropDown extends Template
         parent::__construct($context, $data);
     }
 
-
-
-    /**
-     * Get id post value
-     *
-     * @return integer
-     */
-
-    public function getIdPost()
-    {
-        return $this->request->getParam('id');
-    }
     /**
      *
      * Get surprise product items collection
      *
-     * @return $this
+     * @return object
      */
-    public function getItemCollection()
+
+    public function getSurpriseCollection()
     {
-        $id = $this->getIdPost();
+        $id = $this->request->getParam('id');
 
         /* @var $productSurprise \TSG\Surprise\Model\Product */
         $this->productResource->create()->load($this->productSurprise,$id);
@@ -100,12 +97,7 @@ class ViewSurpriseDropDown extends Template
             $product->setDoNotUseCategoryId(true);
         }
         $this->_itemCollection->load();
-        return $this;
-    }
 
-    public function getSurpriseCollection()
-    {
-        $this->getItemCollection();
         return $this->_itemCollection;
     }
 

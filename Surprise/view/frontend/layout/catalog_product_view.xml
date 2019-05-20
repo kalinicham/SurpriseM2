@@ -3,8 +3,6 @@
     <body>
         <referenceBlock name="product.info.addtocart">
             <block name="surprise.dropdown" class="TSG\Surprise\Block\Product\ViewSurpriseDropDown" template="TSG_Surprise::surprise_drop_down.phtml">
-
-
             </block>
         </referenceBlock>
     </body>
