@@ -1,9 +1,14 @@
+<?php /**
+* Surprise DropDown template
+*
+* @var $block \Magento\Catalog\Model\ResourceModel\Product\Collection
+*/?>
 <?php $_surpriseCollection = $block->getSurpriseCollection(); ?>
 <div class="control">
-    <select id="surprise">
+    <select name="related_product" form="product_addtocart_form">
         <option value="null" selected="selected">Choose a surprise</option>
         <?php  foreach ($_surpriseCollection as $item): ?>
-        <option><?= $item->getName(); ?></option>
+        <option value="<?=$item->getEntityId(); ?>"><?= $item->getName(); ?></option>
         <?php endforeach; ?>
     </select>
 </div>
