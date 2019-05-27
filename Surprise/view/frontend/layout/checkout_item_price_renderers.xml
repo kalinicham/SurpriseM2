@@ -2,6 +2,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <block class="TSG\Surprise\Block\Item\Price\Renderer" name="checkout.item.price.unit" template="TSG_Surprise::item/price/unit.phtml"/>
-    <!--    <block class="TSG\Surprise\Block\Item\Price\Renderer" name="checkout.item.price.row" template="Magento_Checkout::item/price/row.phtml"/>-->
+        <block class="TSG\Surprise\Block\Item\Price\Renderer" name="checkout.item.price.row" template="TSG_Surprise::item/price/row.phtml"/>
     </body>
 </page>

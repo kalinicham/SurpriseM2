@@ -1,34 +1,32 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: root
- * Date: 24.05.19
- * Time: 15:42
+ * User: kalinich
+ * Date: 5/26/19
+ * Time: 3:19 PM
  */
 
-namespace TSG\Surprise\Block\Item\Price;
+namespace TSG\Surprise\Block\Cart\Item\Renderer\Actions;
 
-
+use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Generic;
 use Magento\Framework\View\Element\Template;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class Renderer extends Template
+
+
+class Edit extends Generic
 {
+
 
     /**
      * @var QuoteItem
      */
     protected $item;
 
-    /**
-     * @var string|int|null
-     */
-    protected $storeId = null;
-
-
     protected $serializer;
+
 
     public function __construct(
         Template\Context $context,
@@ -39,27 +37,30 @@ class Renderer extends Template
         parent::__construct($context, $data);
     }
 
-
     /**
-     * Set item for render
+     * Returns current quote item
      *
-     * @param QuoteItem
-     * @return $this
+     * @return AbstractItem
+     * @codeCoverageIgnore
      */
-
-
-
-    public function setItem($item)
-    {
-        $this->item = $item;
-        $this->storeId = $item->getStoreId();
-        return $this;
-    }
 
     public function getItem()
     {
         $this->isSurprise();
         return $this->item;
+    }
+
+    /**
+     * Set current quote item
+     *
+     * @param AbstractItem $item
+     * @return $this
+     * @codeCoverageIgnore
+     */
+    public function setItem(QuoteItem $item)
+    {
+        $this->item = $item;
+        return $this;
     }
 
     public function isSurprise()

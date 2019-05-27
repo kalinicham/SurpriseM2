@@ -4,16 +4,21 @@
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreFile
-/** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
+
+/** @var $block \TSG\Surprise\Block\Item\Price\Renderer */
 $_item = $block->getItem();
 ?>
 
-<?php if ($_item === 'is_surprise') : ?>
-<h1>Surprise</h1>
-<?php else: ?>
+<?php if (!$_item->getSurprise()) : ?>
     <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
         <span class="cart-price">
             <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
         </span>
     </span>
+<?php else:?>
+<style>
+    <?php echo "#cart-".$_item->getId()."-qty" ?> {
+        visibility: hidden;
+    }
+</style>
 <?php endif;?>

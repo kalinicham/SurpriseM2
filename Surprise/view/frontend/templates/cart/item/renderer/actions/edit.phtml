@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \TSG\Surprise\Block\Cart\Item\Renderer\Actions\Edit */
+?>
+<?php $_item = $block->getItem(); ?>
+
+    <?php if ($block->isProductVisibleInSiteVisibility() && !$_item->getSurprise()): ?>
+        <a class="action action-edit"
+           href="<?= /* @escapeNotVerified */ $block->getConfigureUrl() ?>"
+           title="<?= $block->escapeHtml(__('Edit item parameters')) ?>">
+            <span><?= /* @escapeNotVerified */ __('Edit') ?></span>
+        </a>
+    <?php endif ?>
