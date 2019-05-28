@@ -6,6 +6,11 @@ namespace TSG\Surprise\Plugin;
 use Magento\Framework\App\Request\Http;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
+use Magento\Framework\DataObject;
+use Magento\Checkout\Model\Cart\CartInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Checkout\Model\Cart;
+
 
 class AddSurprise
 {
@@ -56,20 +61,17 @@ class AddSurprise
     {
         $params = $this->request->getParams();
         if (array_key_exists("surprise_product", $params)) {
-             $surpriseProduct = $this->productRepository->getById($params['surprise_product']);
-             $surpriseProduct->setPrice(0);
-             $request = $this->objectFactory->create([
+            $surpriseProduct = $this->productRepository->getById($params['surprise_product']);
+            $request = $this->objectFactory->create([
                  'qty' => 1,
                  'price' => 0,
                  'is_surprise' => 1,
              ]);
-            try {
-                $result->getQuote()->addProduct($surpriseProduct,$request);
-
-                } catch (\Exception $e)
-            {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('The product does not exist.'));
-            }
+            $item = $result->getQuote()->addProduct($surpriseProduct,$request);
+            $item->setPrice(0);
+            $item->setCustomPrice(0);
+            $item->setOriginalCustomPrice(0);
+            $item->getProduct()->setIsSuperMode(true);
          }
     }
 }

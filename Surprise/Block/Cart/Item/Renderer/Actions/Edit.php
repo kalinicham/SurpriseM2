@@ -40,7 +40,7 @@ class Edit extends Generic
     /**
      * Returns current quote item
      *
-     * @return AbstractItem
+     * @return QuoteItem
      * @codeCoverageIgnore
      */
 
@@ -53,7 +53,7 @@ class Edit extends Generic
     /**
      * Set current quote item
      *
-     * @param AbstractItem $item
+     * @param QuoteItem $item
      * @return $this
      * @codeCoverageIgnore
      */

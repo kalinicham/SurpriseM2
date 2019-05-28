@@ -15,10 +15,4 @@ $_item = $block->getItem();
             <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
         </span>
     </span>
-<?php else:?>
-<style>
-    <?php echo "#cart-".$_item->getId()."-qty" ?> {
-        visibility: hidden;
-    }
-</style>
 <?php endif;?>

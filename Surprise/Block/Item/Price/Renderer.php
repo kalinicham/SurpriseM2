@@ -68,6 +68,12 @@ class Renderer extends Template
             if ($option->getCode() == 'info_buyRequest') {
                 $param = $this->serializer->unserialize($option->getValue());
                 if (array_key_exists('is_surprise', $param)) {
+              /*      $this->item->setData('price',0);
+                    $this->item->setData('base_price',0);
+                    $this->item->setData('row_total',0);
+                    $this->item->setData('base_row_total',0);
+                    $this->item->setData('original_price',0);
+                    $this->item->setData('calculation_price',0);*/
                     return $this->item->setData('surprise',true);
                 }
             }
