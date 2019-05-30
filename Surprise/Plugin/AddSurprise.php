@@ -60,18 +60,22 @@ class AddSurprise
     public function afterAddProduct($result)
     {
         $params = $this->request->getParams();
-        if (array_key_exists("surprise_product", $params)) {
+        if (array_key_exists("surprise_product", $params) && $params['surprise_product'] !== "" ) {
             $surpriseProduct = $this->productRepository->getById($params['surprise_product']);
             $request = $this->objectFactory->create([
                  'qty' => 1,
                  'price' => 0,
                  'is_surprise' => 1,
              ]);
-            $item = $result->getQuote()->addProduct($surpriseProduct,$request);
+            $item = $result->getQuote()->addProduct($surpriseProduct,$request,'option_');
             $item->setPrice(0);
             $item->setCustomPrice(0);
             $item->setOriginalCustomPrice(0);
+
+            $name = "Surprise ".$item->getName();
+            $item->setName($name);
             $item->getProduct()->setIsSuperMode(true);
+            $a = 1;
          }
     }
 }
