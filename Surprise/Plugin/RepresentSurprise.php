@@ -4,10 +4,13 @@ namespace TSG\Surprise\Plugin;
 
 class RepresentSurprise
 {
-    public function afterRepresentProduct($result)
+    public function afterRepresentProduct($product, $result): bool
     {
-        if ($result->getCustomPrice() === null) {
-           return false;
+        if ($result) {
+            if ($product->getCustomPrice() !== null) {
+               return false;
+            }
         }
+        return $result;
     }
 }

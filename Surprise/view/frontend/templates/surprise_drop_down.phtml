@@ -1,9 +1,15 @@
 <?php /**
 * Surprise DropDown template
 *
-* @var $block \Magento\Catalog\Model\ResourceModel\Product\Collection
+* @var $block \TSG\Surprise\Model\ResourceModel\Product\Collection
 */?>
-<?php $_surpriseCollection = $block->getSurpriseCollection(); ?>
+<?php
+
+$visibleBlock = $block->isVisible();
+$_surpriseCollection = $block->getSurpriseCollection();
+
+?>
+<?php if (count($_surpriseCollection) > 0 && $visibleBlock): ?>
 <div class="control">
     <select name="surprise_product" form="product_addtocart_form">
         <option value="" selected="selected">Choose a surprise</option>
@@ -12,3 +18,4 @@
         <?php endforeach; ?>
     </select>
 </div>
+<?php endif; ?>

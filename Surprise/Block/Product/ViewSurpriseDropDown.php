@@ -15,6 +15,8 @@ use Magento\Framework\App\Request\Http;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+//use Magento\Quote\Model\Quote\Item\AbstractItem;
+
 
 
 class ViewSurpriseDropDown extends Template
@@ -48,6 +50,11 @@ class ViewSurpriseDropDown extends Template
     protected $productResource;
 
     /**
+     * @var AbstractItem
+     */
+ //   protected $item;
+
+    /**
      * @param Http $request
      * @param Product $productSurprise
      * @param Visibility $_catalogProductVisibility
@@ -61,12 +68,14 @@ class ViewSurpriseDropDown extends Template
         Visibility $_catalogProductVisibility,
         ProductFactory $productResource,
         Context $context,
+  //      AbstractItem $item,
         array $data = []
     ) {
         $this->request = $request;
         $this->productSurprise = $productSurprise;
         $this->_catalogProductVisibility = $_catalogProductVisibility;
         $this->productResource = $productResource;
+ //       $this->item = $item;
         parent::__construct($context, $data);
     }
 
@@ -99,6 +108,26 @@ class ViewSurpriseDropDown extends Template
         $this->_itemCollection->load();
 
         return $this->_itemCollection;
+    }
+
+    public function isVisible(): bool
+    {
+        //$quote = $this->item->getQuote()->getAllItems();
+        $a = 1;
+        return true;
+
+
+
+        /*foreach ($this->item->getOptions() as $option){
+            if ($option->getCode() == 'info_buyRequest') {
+                $param = $this->serializer->unserialize($option->getValue());
+                if (array_key_exists('is_surprise', $param)) {
+                    return $this->item->setData('surprise',true);
+                }
+            }
+        }
+        return $this->item->setData('surprise',false);*/
+
     }
 
 }
