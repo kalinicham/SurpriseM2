@@ -15,8 +15,9 @@ use Magento\Framework\App\Request\Http;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-//use Magento\Quote\Model\Quote\Item\AbstractItem;
-
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 
 class ViewSurpriseDropDown extends Template
@@ -49,10 +50,12 @@ class ViewSurpriseDropDown extends Template
      */
     protected $productResource;
 
-    /**
-     * @var AbstractItem
-     */
- //   protected $item;
+
+
+    protected $item;
+
+
+    protected $serializer;
 
     /**
      * @param Http $request
@@ -68,14 +71,16 @@ class ViewSurpriseDropDown extends Template
         Visibility $_catalogProductVisibility,
         ProductFactory $productResource,
         Context $context,
-  //      AbstractItem $item,
+        Session $item,
+        Json $serializer = null,
         array $data = []
     ) {
         $this->request = $request;
         $this->productSurprise = $productSurprise;
         $this->_catalogProductVisibility = $_catalogProductVisibility;
         $this->productResource = $productResource;
- //       $this->item = $item;
+        $this->item = $item;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $data);
     }
 
@@ -112,22 +117,19 @@ class ViewSurpriseDropDown extends Template
 
     public function isVisible(): bool
     {
-        //$quote = $this->item->getQuote()->getAllItems();
-        $a = 1;
-        return true;
+        $quote = $this->item->getQuote()->getAllItems();
 
-
-
-        /*foreach ($this->item->getOptions() as $option){
+        foreach ($quote as $item){
+          foreach ($item->getOptionsByCode() as $option) {
             if ($option->getCode() == 'info_buyRequest') {
                 $param = $this->serializer->unserialize($option->getValue());
                 if (array_key_exists('is_surprise', $param)) {
-                    return $this->item->setData('surprise',true);
+                    return false;
                 }
             }
+          }
         }
-        return $this->item->setData('surprise',false);*/
 
+        return true;
     }
-
 }

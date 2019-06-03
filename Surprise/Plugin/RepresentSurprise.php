@@ -7,9 +7,15 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 class RepresentSurprise
 {
-
+    /**
+     * @var mixed
+     */
     protected $serializer;
 
+    /**
+     * RepresentSurprise constructor.
+     * @param Json|null $serializer
+     */
     public function __construct(
         Json $serializer = null
     )
@@ -17,7 +23,11 @@ class RepresentSurprise
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
-
+    /**
+     * @param $product \Magento\Quote\Model\Quote\Item
+     * @param $result bool
+     * @return bool
+     */
     public function afterRepresentProduct($product, $result): bool
     {
         if ($result) {
@@ -26,11 +36,12 @@ class RepresentSurprise
                 if ($key = "info_buyRequest") {
                   $param = $this->serializer->unserialize($option->getValue());
                    if (array_key_exists('is_surprise',$param) && $param['is_surprise']) {
-                     return false;
+                     $result = false;
                    }
                 }
             }
         }
+
         return $result;
     }
 }
