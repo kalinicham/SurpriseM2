@@ -22,7 +22,7 @@ class InstallData implements InstallDataInterface
 
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-       /* $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
         $eavSetup->addAttribute(
             Product::ENTITY,
             'is_surprise',
@@ -69,6 +69,6 @@ class InstallData implements InstallDataInterface
         ];
 
         $setup->getConnection()
-            ->insertMultiple($setup->getTable('catalog_product_link_attribute'), $data); */
+            ->insertMultiple($setup->getTable('catalog_product_link_attribute'), $data);
     }
 }

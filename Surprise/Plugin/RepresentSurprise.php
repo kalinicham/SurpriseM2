@@ -24,23 +24,40 @@ class RepresentSurprise
     }
 
     /**
-     * @param $product \Magento\Quote\Model\Quote\Item
+     * @param $quoteItem \Magento\Quote\Model\Quote\Item
      * @param $result bool
+     * @param $product \Magento\Catalog\Model\Product
      * @return bool
      */
-    public function afterRepresentProduct($product, $result): bool
+    public function afterRepresentProduct($quoteItem, $result, $product): bool
     {
         if ($result) {
-            foreach ($product->getOptionsByCode() as $key => $option)
+
+            foreach ($quoteItem->getOptionsByCode() as $key => $option)
             {
                 if ($key = "info_buyRequest") {
                   $param = $this->serializer->unserialize($option->getValue());
                    if (array_key_exists('is_surprise',$param) && $param['is_surprise']) {
-                     $result = false;
+
+                       return false;
                    }
                 }
             }
+
+            foreach ($product->getCustomOptions() as $key => $option)
+            {
+                if ($key = "info_buyRequest") {
+                    $param = $this->serializer->unserialize($option->getValue());
+                    if (array_key_exists('is_surprise',$param) && $param['is_surprise']) {
+
+                        return false;
+                    }
+                }
+            }
+
         }
+
+
 
         return $result;
     }
