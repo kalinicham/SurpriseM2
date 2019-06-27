@@ -61,4 +61,11 @@ class RepresentSurprise
 
         return $result;
     }
+
+    public function myFunction($resul): bool
+    {
+
+        return false;
+    }
+
 }

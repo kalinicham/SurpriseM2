@@ -57,6 +57,4 @@ class Product Extends \Magento\Catalog\Model\Product
         return $collection;
     }
 
-
-
 }
