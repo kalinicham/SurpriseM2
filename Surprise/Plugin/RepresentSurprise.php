@@ -4,6 +4,8 @@ namespace TSG\Surprise\Plugin;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Zend\Db\Sql\Predicate\IsNotNull;
+
 
 class RepresentSurprise
 {
