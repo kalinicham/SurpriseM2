@@ -6,10 +6,10 @@ namespace TSG\Surprise\Plugin;
 use Magento\Framework\App\Request\Http;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
-use Magento\Framework\DataObject;
+/*use Magento\Framework\DataObject;
 use Magento\Checkout\Model\Cart\CartInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Cart;*/
 
 
 class AddSurprise

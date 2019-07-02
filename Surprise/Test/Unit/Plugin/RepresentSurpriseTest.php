@@ -3,15 +3,12 @@
 namespace TSG\Surprise\Test\Unit\Plugin;
 
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\Serializer\Json;
 use \PHPUnit\Framework\TestCase;
 use \TSG\Surprise\Plugin\RepresentSurprise;
 use Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option;
-use Magento\Sales\Setup\SerializedDataConverter;
 
 class RepresentSurpriseTest extends TestCase
 {
@@ -44,16 +41,6 @@ class RepresentSurpriseTest extends TestCase
             ['serialize', 'unserialize']
         );
 
-        $this->serializerMock->expects($this->any())
-            ->method('unserialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                )
-            );
-
         $this->repsentProduct = new RepresentSurprise(
             $this->serializerMock
         );
@@ -64,28 +51,39 @@ class RepresentSurpriseTest extends TestCase
     /**
      * @dataProvider additionProvider
      */
-    public function testRepresentProduct($valueQuote, $result, $valueProduct, $expected)
+    public function testRepresentProduct($OptionsByCode, $CustomOptions, $value, $result, $expected)
     {
+        $this->quoteItem->expects($this->any())
+            ->method('getOptionsByCode')
+            ->willReturn(array($OptionsByCode => $this->option));
+        $this->product->expects($this->any())
+            ->method('getCustomOptions')
+            ->willReturn(array($CustomOptions => $this->option));
+        $this->option->expects($this->any())
+            ->method('getValue')
+            ->willReturn($value);
 
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->with($value)
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
 
-        $quoteItem = $this->quoteItem;
-
-        $product = $this->product;
-
-        $quoteItem->expects($this->any())->method('getOptionsByCode')->willReturn(array('info_buyRequest' => $this->option));
-
-        $this->option->expects($this->any())->method('getValue')->willReturn($valueQuote);
-
-        $this->assertEquals($expected, $this->repsentProduct->afterRepresentProduct($quoteItem,$result,$product));
+        $this->assertEquals($expected, $this->repsentProduct->afterRepresentProduct($this->quoteItem,$result,$this->product));
     }
 
     public function additionProvider()
     {
         return [
-            'result false'      =>  ['{}',false,'{}',false],
-            'surprise quote' =>  ['{"is_surprise":"1"}',true,'{"4332":"d32"}',false],
-            'surprise item' =>  ['{"12":"we"}',true,'{"is_surprise":"1"}',false],
-            'not the surprise ' =>  ['{"e324":"324"}',true,'{"324":"dewd"}',true],
+            'result false'      =>  ['qoute','product','{}',false,false],
+            'surprise quote'    =>  ['info_buyRequest','product','{"is_surprise":"1"}',true,false],
+            'surprise item'     =>  ['qoute','info_buyRequest','{"is_surprise":"1"}',true,false],
+            'not surprise '     =>  ['info_buyRequest','info_buyRequest','{"product":"1"}',true,true],
         ];
     }
 

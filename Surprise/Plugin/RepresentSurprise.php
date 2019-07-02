@@ -37,7 +37,7 @@ class RepresentSurprise
 
             foreach ($quoteItem->getOptionsByCode() as $key => $option)
             {
-                if ($key = "info_buyRequest") {
+                if ($key == "info_buyRequest") {
                   $param = $this->serializer->unserialize($option->getValue());
                    if (array_key_exists('is_surprise',$param) && $param['is_surprise']) {
 
@@ -48,7 +48,7 @@ class RepresentSurprise
 
             foreach ($product->getCustomOptions() as $key => $option)
             {
-                if ($key = "info_buyRequest") {
+                if ($key == "info_buyRequest") {
                     $param = $this->serializer->unserialize($option->getValue());
                     if (array_key_exists('is_surprise',$param) && $param['is_surprise']) {
 
