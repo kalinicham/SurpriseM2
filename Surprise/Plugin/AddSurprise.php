@@ -72,10 +72,12 @@ class AddSurprise
             $item->setCustomPrice(0);
             $item->setOriginalCustomPrice(0);
 
-            $item->addOption(array(
-                'code' => 'product_type',
-                'value' => "surprise"
-            ));
+            $item->addOption(
+                array(
+                 'code' => 'product_type',
+                'value' => 'surprise',
+                )
+            );
 
             $item->getProduct()->setIsSuperMode(true);
          }
