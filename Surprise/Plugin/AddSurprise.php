@@ -74,7 +74,7 @@ class AddSurprise
 
             $item->addOption(
                 array(
-                 'code' => 'product_type',
+                'code' => 'product_type',
                 'value' => 'surprise',
                 )
             );
