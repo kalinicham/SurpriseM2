@@ -3,13 +3,13 @@
 namespace TSG\Surprise\Test\Integration\Plugin;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
 use Magento\Checkout\Model\Cart;
 use Magento\Framework\App\Request\Http;
-use \TSG\Surprise\Plugin\AddSurprise;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\TestFramework\Helper\Bootstrap;
+use TSG\Surprise\Plugin\AddSurprise;
 
-class AddSurpriseTest extends TestCase
+class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
      * @var Cart;
@@ -24,12 +24,23 @@ class AddSurpriseTest extends TestCase
      */
     private $request;
 
+    /**
+     * @var Bootstrap;
+     */
+    private $bootstrap;
 
+    /**
+     * @var FormKey
+    */
+    private $formKey;
 
     protected function setUp()
     {
-        $this->cart = Bootstrap::getObjectManager()->create(Cart::class);
-        $this->request = Bootstrap::getObjectManager()->create(Http::class);
+        parent::setUp();
+
+        $this->bootstrap = Bootstrap::getObjectManager();
+        $this->cart = $this->bootstrap->create(Cart::class);
+        $this->request = $this->bootstrap->create(Http::class);
     }
 
     /**
@@ -40,28 +51,26 @@ class AddSurpriseTest extends TestCase
 
     public function testAfterAddProduct()
     {
-        $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $productRepository = $this->bootstrap->create(ProductRepositoryInterface::class);
         $product = $productRepository->get('simple');
 
         $this->request->setParams(['surprise_product' => $product->getId()]);
 
-        $this->addSurprise = Bootstrap::getObjectManager()
-            ->create(AddSurprise::class,[
+        $this->addSurprise = $this->bootstrap
+            ->create(AddSurprise::class, [
                 'request' => $this->request
             ]);
         $this->addSurprise->afterAddProduct($this->cart);
 
         $items = $this->cart->getQuote()->getAllItems();
-            $this->assertEquals(1, count($items));
-
+        $this->assertEquals(1, count($items));
         $item = $items[0];
-            $this->assertEquals(1, $item->getQty());
-            $this->assertEquals(0, $item->getPrice());
-            $this->assertEquals(0, $item->getCustomPrice());
-            $this->assertEquals($product->getId(), $item->getOptionByCode('info_buyRequest')->getProductId());
-            $this->assertEquals('surprise', $item->getOptionByCode('product_type')->getValue());
+        $this->assertEquals(1, $item->getQty());
+        $this->assertEquals(0, $item->getPrice());
+        $this->assertEquals(0, $item->getCustomPrice());
+        $this->assertEquals($product->getId(), $item->getOptionByCode('info_buyRequest')->getProductId());
+        $this->assertEquals('surprise', $item->getOptionByCode('product_type')->getValue());
     }
-
 
     /**
      * @magentoDataFixture createSimpleProduct
@@ -69,24 +78,22 @@ class AddSurpriseTest extends TestCase
      * @magentoAppIsolation enabled
      */
 
-    public function testAddProduct ()
+    public function testAddProduct()
     {
-        $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple');
-        $this->request->setParams(['surprise_product' => $product->getId()]);
+        $this->formKey = $this->_objectManager->get(FormKey::class);
 
-        $cart = Bootstrap::getObjectManager()->create(Cart::class);
+        $request= [
+            'form_key' => $this->formKey->getFormKey()
+        ];
 
-        $cart->addProduct(3000,2);
+        $this->getRequest()->setPostValue($request);
 
-        $a = 1;
+        $this->bootstrap->create(\Magento\Checkout\Controller\Cart\Add::class)->execute();
     }
-
 
     public static function createSimpleProduct()
     {
-
-        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+        $product = Bootstrap::getObjectManager()->create(\TSG\Surprise\Model\Product::class);
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             ->setId(3000)
             ->setName('Simple')
