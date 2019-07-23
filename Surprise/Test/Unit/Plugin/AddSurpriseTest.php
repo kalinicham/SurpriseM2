@@ -3,16 +3,15 @@
 namespace TSG\Surprise\Test\Unit\Plugin;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Cart;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use PHPUnit\Framework\TestCase;
 use \TSG\Surprise\Plugin\AddSurprise;
-
 
 class AddSurpriseTest extends TestCase
 {
@@ -30,7 +29,6 @@ class AddSurpriseTest extends TestCase
 
     public function setUp(): void
     {
-
         $this->requestMock = $this->createMock(Http::class);
 
         $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
@@ -50,17 +48,13 @@ class AddSurpriseTest extends TestCase
             ]
 
         );
-
-
     }
-
 
     public function testAddSurprise()
     {
-
-        $param = array(
+        $param = [
             'surprise_product' => 10
-        );
+        ];
 
         $arrayData = [
             'qty' => 1,
@@ -96,14 +90,9 @@ class AddSurpriseTest extends TestCase
 
         $quoteMock->expects($this->once())
             ->method('addProduct')
-            ->with($param['surprise_product'],$this->requestMock,'option_')
+            ->with($param['surprise_product'], $this->requestMock, 'option_')
             ->willReturn('sdasdasd');
 
         $this->addSurpirse->afterAddProduct($this->resultMock);
-
-
-
-
     }
-
 }

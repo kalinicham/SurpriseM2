@@ -1,16 +1,15 @@
 <?php
 
-
 namespace TSG\Surprise\Plugin;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
+
 /*use Magento\Framework\DataObject;
 use Magento\Checkout\Model\Cart\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Checkout\Model\Cart;*/
-
 
 class AddSurprise
 {
@@ -60,26 +59,26 @@ class AddSurprise
     public function afterAddProduct($result)
     {
         $params = $this->request->getParams();
-        if (array_key_exists("surprise_product", $params) && $params['surprise_product'] !== "" ) {
+        if (array_key_exists("surprise_product", $params) && $params['surprise_product'] !== "") {
             $surpriseProduct = $this->productRepository->getById($params['surprise_product']);
             $request = $this->objectFactory->create([
                  'qty' => 1,
                  'price' => 0,
                  'is_surprise' => 1,
              ]);
-            $item = $result->getQuote()->addProduct($surpriseProduct,$request,'option_');
+            $item = $result->getQuote()->addProduct($surpriseProduct, $request, 'option_');
             $item->setPrice(0);
             $item->setCustomPrice(0);
             $item->setOriginalCustomPrice(0);
 
             $item->addOption(
-                array(
+                [
                 'code' => 'product_type',
                 'value' => 'surprise',
-                )
+                ]
             );
 
             $item->getProduct()->setIsSuperMode(true);
-         }
+        }
     }
 }
