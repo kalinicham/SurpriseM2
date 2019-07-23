@@ -1,5 +1,6 @@
 <?php
 namespace TSG\Surprise\Test\Integration\Plugin;
+
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Cart;
 use Magento\Framework\App\Request\Http;
@@ -80,23 +81,23 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testAddProductNew()
     {
         $this->formKey = $this->_objectManager->get(FormKey::class);
-       /* $request= [
-            'form_key' => $this->formKey->getFormKey(),
-            'product' => 3000,
-            'item' => 1,
+        $request = [
+            'product' => 1,
             'qty' => 2,
-            'surprise_product' => 2,
-            'related_product' => '',
-        ];*/
-        $request = ['surprise_product' => 2];
+            'surprise_product' => 2
+        ];
         $this->getRequest()->setPostValue($request);
-        $this->bootstrap->create(Cart::class)->addProduct(1,2);
+        $this->bootstrap->create(Cart::class)->addProduct($request['product'], 2);
         $items = $this->cart->getQuote()->getAllItems();
         $this->assertEquals(2, count($items));
+        $item = $items[0];
+        $this->assertEquals(2, $item->getQty());
+        $this->assertEquals('simple', $item->getSku());
+        $item = $items[1];
+        $this->assertEquals(1, $item->getQty());
+        $this->assertEquals(0, $item->getPrice());
+        $this->assertEquals('surprise', $item->getSku());
     }
-
-
-
 
     /**
      * @magentoDataFixture createSimpleProduct
@@ -122,7 +123,6 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
 
     }*/
 
-
     public static function createSimpleProduct()
     {
         $product = Bootstrap::getObjectManager()->create(\TSG\Surprise\Model\Product::class);
@@ -143,8 +143,8 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = Bootstrap::getObjectManager()->create(\TSG\Surprise\Model\Product::class);
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
             ->setId(2)
-            ->setName('Simple')
-            ->setSku('simple')
+            ->setName('surprise')
+            ->setSku('surprise')
             ->setPrice(10)
             ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
             ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
