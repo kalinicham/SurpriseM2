@@ -42,8 +42,6 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->bootstrap = Bootstrap::getObjectManager();
         $this->cart = $this->bootstrap->create(Cart::class);
         $this->request = $this->bootstrap->create(Http::class);
-        $this->plaginList = $this->bootstrap->get(PluginList::class);
-        $this->moduleList = $this->bootstrap->get(\Magento\Framework\Module\ModuleList::class);
     }
     /**
      * @magentoDataFixture createSimpleProduct
@@ -78,7 +76,7 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testAddProductNew()
+    public function testAddProduct()
     {
         $this->formKey = $this->_objectManager->get(FormKey::class);
         $request = [
@@ -98,30 +96,6 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(0, $item->getPrice());
         $this->assertEquals('surprise', $item->getSku());
     }
-
-    /**
-     * @magentoDataFixture createSimpleProduct
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     * @magentoAppArea frontend
-     */
-    /*public function testAddProduct()
-    {
-        $this->formKey = $this->_objectManager->get(FormKey::class);
-        $request= [
-            'form_key' => $this->formKey->getFormKey(),
-            'product' => 3000,
-            'item' => 1,
-            'qty' => 2,
-            'surprise_product' => 2,
-            'related_product' => '',
-        ];
-        $this->getRequest()->setPostValue($request);
-        $this->bootstrap->create(\Magento\Checkout\Controller\Cart\Add::class)->execute();
-        $items = $this->cart->getQuote()->getAllItems();
-        $this->assertEquals(2, count($items));
-
-    }*/
 
     public static function createSimpleProduct()
     {
