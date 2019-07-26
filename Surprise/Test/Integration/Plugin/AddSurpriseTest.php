@@ -32,10 +32,6 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     private $formKey;
 
-    private $plaginList;
-
-    private $moduleList;
-
     protected function setUp()
     {
         parent::setUp();
@@ -78,6 +74,12 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAddProduct()
     {
+       /* $expectedProducts = array(
+         0 => [
+
+         ]
+        );*/
+
         $this->formKey = $this->_objectManager->get(FormKey::class);
         $request = [
             'product' => 1,
@@ -85,9 +87,15 @@ class AddSurpriseTest extends \Magento\TestFramework\TestCase\AbstractController
             'surprise_product' => 2
         ];
         $this->getRequest()->setPostValue($request);
-        $this->bootstrap->create(Cart::class)->addProduct($request['product'], 2);
+        $this->bootstrap->create(Cart::class)->addProduct($request['product']);
         $items = $this->cart->getQuote()->getAllItems();
         $this->assertEquals(2, count($items));
+       /* foreach ($items as $item) {
+            $this->assertEquals( , $item->getQty());
+        }*/
+
+
+
         $item = $items[0];
         $this->assertEquals(2, $item->getQty());
         $this->assertEquals('simple', $item->getSku());
