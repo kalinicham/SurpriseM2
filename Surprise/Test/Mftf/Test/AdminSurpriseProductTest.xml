@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSurpriseProductTest">
+        <annotations>
+            <features value="Product"/>
+            <stories value="Create a Product via the Admin"/>
+            <title value="Admin should be able to create Product"/>
+            <description value="Create a Product with enabled surprise attribute via the Admin"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="SURPRISE-1"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
+        <fillField userInput="{{simpleSurprise.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{simpleSurprise.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSku"/>
+        <fillField userInput="{{simpleSurprise.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{simpleSurprise.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <click selector="{{AdminProductFormSection.enableSurpriseLabel}}" stepKey="clickEnableSurpriseLabelToDisableSurprise"/>
+        <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="clickSaveArrow"/>
+        <click selector="{{AdminProductFormActionSection.saveAndClose}}" stepKey="clickSaveClose"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveSuccessMessage"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFilters"/>
+        <fillField userInput="{{simpleSurprise.sku}}" selector="{{AdminProductGridFilterSection.skuFilter}}" stepKey="fillQuantityFilters"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="applyFilters"/>
+        <see selector="{{AdminProductGridSection.firstProductRowName}}" userInput="{{simpleSurprise.name}}" stepKey="seeSaveSurpriseName"/>
+    </test>
+</tests>
