@@ -18,7 +18,6 @@
         <after>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
         <fillField userInput="{{simpleSurprise.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
@@ -33,5 +32,50 @@
         <fillField userInput="{{simpleSurprise.sku}}" selector="{{AdminProductGridFilterSection.skuFilter}}" stepKey="fillQuantityFilters"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="applyFilters"/>
         <see selector="{{AdminProductGridSection.firstProductRowName}}" userInput="{{simpleSurprise.name}}" stepKey="seeSaveSurpriseName"/>
+        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnSurprisePage"/>
+        <wait stepKey="waitLoadPageFiveSecond" time="5" />
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
+        <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabUrlKey"/>
+        <amOnPage url="{{StorefrontHomePage.url}}/$grabUrlKey.html" stepKey="navigateToHomePage" />
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleSurprise.name}}" stepKey="seeProductInStoreFrontPage"/>
     </test>
+
+    <test name="AdminCreateSurpriseProductTestActionGroup">
+        <annotations>
+            <features value="Product"/>
+            <stories value="Create a Product via the Admin Action"/>
+            <title value="Admin should be able to create Product"/>
+            <description value="Create a Product with enabled surprise attribute via the Admin"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="SURPRISE-2"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
+        <actionGroup ref="fillMainProductSurpriseForm" stepKey="fillWithIsSurprise" />
+
+        <click selector="{{AdminProductFormActionSection.saveArrow}}" stepKey="clickSaveArrow"/>
+        <click selector="{{AdminProductFormActionSection.saveAndClose}}" stepKey="clickSaveClose"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveSuccessMessage"/>
+
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+            <argument name="product" value="simpleSurprise"/>
+        </actionGroup>
+
+        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnSurprisePage"/>
+        <wait stepKey="waitLoadPageFiveSecond" time="5" />
+
+        <actionGroup ref="seeProductInStoreFrontPageByUrl" stepKey="seeProductInStoreFrontPage"/>
+    </test>
+
+
+
 </tests>

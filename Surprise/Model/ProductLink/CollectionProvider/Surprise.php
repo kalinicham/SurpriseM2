@@ -9,6 +9,4 @@ class Surprise
     {
         return $product->getSurpriseProducts();
     }
-
-
 }
