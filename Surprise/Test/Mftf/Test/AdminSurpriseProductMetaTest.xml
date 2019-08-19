@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+   <test name="AdminCreateSurpriseProductTestMeta">
+    <annotations>
+        <features value="Product"/>
+        <stories value="Create a Product via the Admin Action"/>
+        <title value="Admin should be able to create Product"/>
+        <description value="Create a Product with enabled surprise attribute via the Admin"/>
+        <severity value="CRITICAL"/>
+        <testCaseId value="SURPRISE-3"/>
+        <group value="Mytest"/>
+    </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SurpriseProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+    </test>
+
+</tests>
