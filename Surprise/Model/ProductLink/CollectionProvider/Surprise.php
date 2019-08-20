@@ -2,10 +2,15 @@
 
 namespace TSG\Surprise\Model\ProductLink\CollectionProvider;
 
-class Surprise
-{
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductLink\CollectionProviderInterface;
 
-    public function getLinkedProducts(\Magento\Catalog\Model\Product $product)
+class Surprise implements CollectionProviderInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getLinkedProducts(Product $product)
     {
         return $product->getSurpriseProducts();
     }
