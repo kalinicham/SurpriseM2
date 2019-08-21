@@ -3,11 +3,8 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultProduct" type="product">
-        <data key="is_surprise">1</data>
-    </entity>
-
-    <entity name="_defaultProductSurprise" type="product" extends="_defaultProduct">
-        <data key="is_surprise">0</data>
+        <data key="status">0</data>
+        <requiredEntity type="surprise_extension_attribute">SurpriseEnabled</requiredEntity>
     </entity>
 
 </entities>
