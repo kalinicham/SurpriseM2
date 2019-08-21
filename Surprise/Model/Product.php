@@ -2,11 +2,7 @@
 
 namespace TSG\Surprise\Model;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\FilterProductCustomAttribute;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
-use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
 use TSG\Surprise\Model\Product\Link;
 

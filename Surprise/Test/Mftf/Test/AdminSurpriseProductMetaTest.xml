@@ -18,6 +18,9 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <createData entity="_defaultProductSurprise" stepKey="createSimpleProductSurprise">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
         </before>
     </test>
 
