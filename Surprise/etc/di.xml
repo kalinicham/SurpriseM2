@@ -14,4 +14,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="TSG\Surprise\Model\ProductLink\CollectionProvider\Surprise">
+        <plugin name="change_link_before" type="\TSG\Surprise\Plugin\Related" sortOrder="2" disabled="false" />
+    </type>
 </config>
