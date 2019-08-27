@@ -2,7 +2,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-   <test name="AdminCreateSurpriseProductTestMeta">
+   <test name="AdminSurpriseTest">
     <annotations>
         <features value="Product"/>
         <stories value="Create a Product via the Admin Action"/>
@@ -18,10 +18,31 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-           <!-- <createData entity="_defaultProductSurprise" stepKey="createSimpleProductSurprise">
+            <createData entity="_defaultProductSurprise" stepKey="createSimpleProductSurprise">
                 <requiredEntity createDataKey="createCategory"/>
-            </createData>-->
-        </before>
-    </test>
+            </createData>
 
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+
+        </before>
+       <after>
+           <deleteData createDataKey="createSimpleProductSurprise" stepKey="deleteSimpleProductSurprise" />
+           <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct" />
+           <deleteData createDataKey="createCategory" stepKey="deleteCategory" />
+           <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+       <!-- Enable attribute Is_Surprise -->
+       <amOnPage url="{{AdminProductEditPage.url($createSimpleProductSurprise.id$)}}" stepKey="goToProductSurprise"/>
+       <click selector="{{AdminProductFormSection.enableSurpriseLabel}}" stepKey="enableSurprise"/>
+       <click selector="{{AdminProductFormSection.save}}" stepKey="saveProductSurprise" />
+       <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+       <amOnPage url="{{AdminProductEditPage.url($createSimpleProduct.id$)}}" stepKey="goToProduct"/>
+       <actionGroup ref="addSurpriseProductBySku" stepKey="addSurpriseToProductBySku">
+           <argument name="name" value="$createSimpleProductSurprise.name$" />
+           <argument name="sku" value="$createSimpleProductSurprise.sku$" />
+       </actionGroup>
+
+   </test>
 </tests>

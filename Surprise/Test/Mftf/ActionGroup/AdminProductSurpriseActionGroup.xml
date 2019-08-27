@@ -21,6 +21,6 @@
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="//input[@data-action='select-row']" stepKey="selectProduct"/>
-        <click selector="//*[@id='html-body']/div[6]/aside[13]/div[2]/header/div/div/div/button[2]" stepKey="addSurpriseProductSelected"/>
+        <click selector="//button[@class='action-primary']/span[contains(.,'Add Selected Products')]" stepKey="addSurpriseProductSelected"/>
     </actionGroup>
 </actionGroups>
