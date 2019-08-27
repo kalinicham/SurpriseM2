@@ -4,9 +4,10 @@ namespace TSG\Surprise\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
+use TSG\Surprise\Api\Data\SurpriseInterface;
 use TSG\Surprise\Model\Product\Link;
 
-class Product extends \Magento\Catalog\Model\Product implements ProductInterface
+class Product extends \Magento\Catalog\Model\Product implements SurpriseInterface
 {
     /**
      * Retrieve array of related products
@@ -58,5 +59,15 @@ class Product extends \Magento\Catalog\Model\Product implements ProductInterface
     public function getLinkInstance()
     {
         return ObjectManager::getInstance()->create(Link::class);
+    }
+
+    public function getIsSurprise()
+    {
+        return $this->_getData('is_surprise');
+    }
+
+    public function setIsSurprise($isSurprise)
+    {
+        return $this->setData(self::IS_SURPRISE, $isSurprise);
     }
 }

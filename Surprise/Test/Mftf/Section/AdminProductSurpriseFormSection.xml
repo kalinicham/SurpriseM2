@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormSection">
+        <element name="enableSurpriseLabel" type="checkbox" selector="input[name='product[is_surprise]']+label"/>
+    </section>
+
+    <section name="AdminProductFormRelatedUpSellCrossSellSection">
+        <element name="surpriseDropdown" type="block" selector="//div[@data-index='surprise']" timeout="30"/>
+        <element name="surpriseDependent" type="block" selector="//div[@data-index='surprise']//div[contains(@class, '_show')]"/>
+        <element name="AddSurpriseProductsButton" type="button" selector="button[data-index='button_surprise']" timeout="30"/>
+    </section>
+
+</sections>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+
+    <!--Surprise products-->
+    <actionGroup name="addSurpriseProductBySku">
+        <arguments>
+            <argument name="name"/>
+            <argument name="sku"/>
+        </arguments>
+
+        <!--Scroll up to avoid error-->
+        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.surpriseDropdown}}" x="0" y="-100" stepKey="scrollTo"/>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.surpriseDropdown}}" dependentSelector="AdminProductFormRelatedUpSellCrossSellSection.surpriseDependent" visible="false" stepKey="openDropDownIfClosedSurprise"/>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddSurpriseProductsButton}}" stepKey="clickAddSurpriseProductButton"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{name}}" stepKey="fillProductNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="//input[@data-action='select-row']" stepKey="selectProduct"/>
+        <click selector="//*[@id='html-body']/div[6]/aside[13]/div[2]/header/div/div/div/button[2]" stepKey="addSurpriseProductSelected"/>
+    </actionGroup>
+</actionGroups>
